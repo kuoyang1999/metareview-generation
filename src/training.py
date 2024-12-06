@@ -1,6 +1,10 @@
 import logging
 import torch
 import transformers
+import datetime
+import json
+import os
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional
 from torch import nn
@@ -56,6 +60,32 @@ def train():
         raise NotImplementedError("GPT-NeoX models are not currently supported")
     else:
         replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)
+        
+    # Setup output directory
+    # If no output_dir is specified, use a timestamped directory under `checkpoints/`.
+    if not training_args.output_dir or training_args.output_dir.strip() == "":
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        training_args.output_dir = f"./checkpoints/{timestamp}"
+
+    # Create the output directory if it doesn't exist
+    Path(training_args.output_dir).mkdir(parents=True, exist_ok=True)
+
+    # Save arguments to a JSON file for future reference
+    args_dict = {
+        "model_name_or_path": model_args.model_name_or_path,
+        "data_path": data_args.data_path,
+        "num_train_epochs": training_args.num_train_epochs,
+        "per_device_train_batch_size": training_args.per_device_train_batch_size,
+        "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+        "learning_rate": training_args.learning_rate,
+        "lr_scheduler_type": str(training_args.lr_scheduler_type),
+        "use_flash_attn": training_args.use_flash_attn,
+        "low_rank_training": training_args.low_rank_training,
+        # Add or remove fields as you like
+    }
+    args_file = os.path.join(training_args.output_dir, "args.json")
+    with open(args_file, "w") as f:
+        json.dump(args_dict, f, indent=4)
 
     model, tokenizer = load_model_and_tokenizer(model_args, training_args)
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
