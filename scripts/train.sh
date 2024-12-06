@@ -9,7 +9,7 @@ torchrun --nproc_per_node=4 \
     --output_dir "" \
     --model_max_length 16384 \
     --use_flash_attn True \
-    --data_path /mnt/nvme1/datasets/LongAlpaca-16k-length/LongAlpaca-16k-length.json \
+    --data_path "oaimli/PeerSum" \
     --low_rank_training True \
     --gradient_accumulation_steps 1 \
     --num_train_epochs 1 \
@@ -26,3 +26,5 @@ torchrun --nproc_per_node=4 \
     --logging_steps 1 \
     --tf32 True \
     --deepspeed configs/ds_configs/stage3.json
+
+    #     --data_path /mnt/nvme1/datasets/LongAlpaca-16k-length/LongAlpaca-16k-length.json \
