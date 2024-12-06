@@ -1,0 +1,40 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtualenv
+venv/
+.env/
+
+# Jupyter notebooks metadata
+.ipynb_checkpoints/
+
+# PyTorch checkpoints
+checkpoints/
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# Generated files
+*.pkl
+*.h5
+*.pt
+*.bin
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore large files or intermediate datasets if any
+data/raw/
+data/intermediate/
+
+# Ignore model cards, etc, if desired
+*.modelcard
