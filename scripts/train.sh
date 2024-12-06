@@ -11,10 +11,10 @@ torchrun --nproc_per_node=4 \
     --use_flash_attn True \
     --data_path /mnt/nvme1/datasets/LongAlpaca-16k-length/LongAlpaca-16k-length.json \
     --low_rank_training True \
-    --num_train_epochs 5 \
+    --gradient_accumulation_steps 1 \
+    --num_train_epochs 1 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 2 \
-    --gradient_accumulation_steps 1 \
     --eval_strategy "no" \
     --save_strategy "steps" \
     --save_steps 98 \
@@ -25,4 +25,4 @@ torchrun --nproc_per_node=4 \
     --lr_scheduler_type "constant_with_warmup" \
     --logging_steps 1 \
     --tf32 True \
-    --deepspeed configs/deepspeed_config.json
+    --deepspeed configs/ds_configs/stage3.json
