@@ -4,6 +4,7 @@ import logging
 import torch
 import transformers
 import datetime
+import wandb
 from dataclasses import dataclass, field
 from typing import Optional
 from torch import nn
@@ -16,7 +17,7 @@ from .attn.llama_attn_replace_sft import replace_llama_attn
 
 @dataclass
 class ModelArguments:
-    model_name_or_path: Optional[str] = field(default="EleutherAI/pythia-1.4b-deduped")
+    model_name_or_path: Optional[str] = field(default="meta-llama/Llama-2-7b-hf")
     model_type: Optional[str] = field(default="llama")
 
 @dataclass
@@ -49,19 +50,49 @@ class TrainingArguments(transformers.TrainingArguments):
         default="embed,norm",
         metadata={"help": "Additional trainable parameters except LoRA weights if low rank training."},
     )
+    use_wandb: bool = field(
+        default=True,
+        metadata={"help": "Enable Wandb logging (default: True)."},
+    )
 
 def train():
     parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     
     # Setup default output directory
+    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    
     if not training_args.output_dir:
-        training_args.output_dir = f"checkpoints/{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        training_args.output_dir = f"checkpoints/{timestamp}"
+
+    # Combine all arguments into a single config dictionary
+    config = {
+        "model_name_or_path": model_args.model_name_or_path,
+        "data_name_or_path": data_args.data_name_or_path,
+        "max_samples": data_args.max_samples,
+        "num_train_epochs": training_args.num_train_epochs,
+        "per_device_train_batch_size": training_args.per_device_train_batch_size,
+        "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+        "learning_rate": training_args.learning_rate,
+        "lr_scheduler_type": str(training_args.lr_scheduler_type),
+        "use_flash_attn": training_args.use_flash_attn,
+        "low_rank_training": training_args.low_rank_training,
+        "save_steps": training_args.save_steps,
+        "output_dir": training_args.output_dir,
+        # Add more arguments as needed
+    }
+
+    # Initialize Wandb if enabled
+    if training_args.use_wandb and training_args.local_rank == 0:
+        wandb.init(
+            project="meta-review",
+            config=config,
+            name=f"{timestamp}",
+            dir="logs",
+        )
 
     # Setup attention
     if model_args.model_type == "gpt-neox":
-        # TODO: add this back when we have a model that uses it, now raises an error
-        # replace_gpt_neox_attn(training_args.use_flash_attn, training_args.use_full_attn)
         raise NotImplementedError("GPT-NeoX models are not currently supported")
     else:
         replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)
@@ -88,22 +119,12 @@ def train():
     trainer.train()
     trainer.save_state()
     trainer.save_model(output_dir=training_args.output_dir)
-    
-    # Save parameters to identify the experiment settings
-    args_to_save = {
-        "model_name_or_path": model_args.model_name_or_path,
-        "data_path": data_args.data_path,
-        "num_train_epochs": training_args.num_train_epochs,
-        "per_device_train_batch_size": training_args.per_device_train_batch_size,
-        "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
-        "learning_rate": training_args.learning_rate,
-        "lr_scheduler_type": str(training_args.lr_scheduler_type),
-        "use_flash_attn": training_args.use_flash_attn,
-        "low_rank_training": training_args.low_rank_training,
-        # Add or remove fields as you like
-    }
 
-    # Save these minimal parameters as JSON
+    # Save parameters and Wandb config
     args_file = os.path.join(training_args.output_dir, "settings.json")
     with open(args_file, "w") as f:
-        json.dump(args_to_save, f, indent=4)
+        json.dump(config, f, indent=4)
+
+    # End Wandb session (optional, Wandb auto-closes normally)
+    if training_args.use_wandb:
+        wandb.finish()

@@ -11,15 +11,15 @@ from .preprocessing import preprocess
 class SupervisedDataset(Dataset):
     """
     A dataset class for supervised fine-tuning from a local JSON file.
-    Assumes data_path points to a .json or .jsonl file with 'instruction', 'input', 'output'.
+    Assumes data_name_or_path points to a .json or .jsonl file with 'instruction', 'input', 'output'.
     """
-    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizer, max_samples: Optional[int] = None):
+    def __init__(self, data_name_or_path: str, tokenizer: PreTrainedTokenizer, max_samples: Optional[int] = None):
         super().__init__()
         logging.warning("Loading local JSON data...")
         
         # Load data via utility function jload
         from ..utils import jload
-        list_data_dict = jload(data_path)
+        list_data_dict = jload(data_name_or_path)
         
         if max_samples is not None:
             list_data_dict = list_data_dict[:max_samples]

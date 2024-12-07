@@ -17,6 +17,7 @@ checkpoints/
 # Logs
 logs/
 *.log
+wandb/
 
 # Generated files
 *.pkl
