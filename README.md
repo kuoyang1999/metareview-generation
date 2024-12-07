@@ -39,15 +39,22 @@ Meta-Review/
 ├─ checkpoints/                  # Checkpoints saved here
 │
 ├─ logs/
-│  ├─ training.log               # Training logs
+│  └─ wandb/                     # Wandb logs
 │
 ├─ environment.yml               # Conda environment file (alternative install)
+├─ requirements.txt              # Pip requirements file (alternative install)
 └─ README.md                     # This documentation
 ```
 
 ## Installation
 
-You have two main ways to install the environment:
+### 1. Install PyTorch (Required)
+
+Before setting up the environment, ensure you install a compatible PyTorch version. Visit the [PyTorch Installation Guide](https://pytorch.org/get-started/locally/) for details. Below are some examples:
+
+- **CUDA 12.1:**
+  ```bash
+  pip install torch==2.5.1+cu121 torchvision==0.20.1+cu121 torchaudio==2.5.1+cu121 -f https://download.pytorch.org/whl/torch_stable.html
 
 ### 1. Using `environment.yml` with Conda
 
@@ -57,8 +64,6 @@ If you have Conda installed, you can create an environment directly:
 conda env create -f environment.yml
 conda activate meta-review
 ```
-
-**Note:** Check the `environment.yml` file and adjust the PyTorch version according to your CUDA version if needed. For example, if you’re on CUDA 11.7, you may need a different PyTorch build. See PyTorch’s website for the correct version.
 
 ### 2. Using `requirements.txt` (Pip)
 
@@ -73,15 +78,6 @@ Install dependencies:
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
-
-**Adjusting PyTorch Version:**
-Make sure to install a PyTorch version compatible with your CUDA device. For example:
-
-```bash
-pip install torch==2.0.1+cu117 -f https://download.pytorch.org/whl/torch_stable.html
-```
-
-Check the [PyTorch Installation Guide](https://pytorch.org/get-started/locally/) for details.
 
 ### 3. Hugging Face Login
 

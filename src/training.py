@@ -83,6 +83,8 @@ def train():
     }
 
     # Initialize Wandb if enabled
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
     if training_args.use_wandb and training_args.local_rank == 0:
         wandb.init(
             project="meta-review",
