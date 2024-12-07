@@ -14,10 +14,10 @@ def make_supervised_data_module(tokenizer: PreTrainedTokenizer, data_args) -> Di
     logging.warning(f"Loading dataset from path: {data_args.data_path}")
     
     if data_args.data_path == "oaimli/PeerSum":
-        train_dataset = PeerSumDataset(tokenizer=tokenizer, split="train", max_samples=1000)
+        train_dataset = PeerSumDataset(tokenizer=tokenizer, split="train", max_samples=data_args.max_samples)
         eval_dataset = None  # Modify if PeerSum has validation/test splits
     else:
-        train_dataset = SupervisedDataset(tokenizer=tokenizer, data_path=data_args.data_path, max_samples=100)
+        train_dataset = SupervisedDataset(tokenizer=tokenizer, data_path=data_args.data_path, max_samples=data_args.max_samples)
         eval_dataset = None  # Add if you have evaluation data
 
     data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)

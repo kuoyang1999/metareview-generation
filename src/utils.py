@@ -40,7 +40,15 @@ PROMPT_DICT = {
         "If you don't know the answer to a question, please don't share false information.\n"
         "<</SYS>> \n\n {instruction} \n{input} [/INST]"
     ),
-    "prompt_llama2": "[INST]{instruction}[/INST]"
+    "peersum_prompt": (
+        "[INST] <<SYS>>\n"
+        "You are a helpful assistant. You are given a paper abstract and a set of peer review messages. "
+        "Your goal is to produce a coherent meta-review that summarizes the key points and assessments from the provided reviews.\n"
+        "<</SYS>>\n\n"
+        "### Paper Abstract:\n{paper_abstract}\n\n"
+        "### Reviews:\n{review_contents}\n\n"
+        "### Meta Review:"
+    )
 }
 
 

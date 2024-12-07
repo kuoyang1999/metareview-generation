@@ -52,33 +52,58 @@ class SupervisedDataset(Dataset):
 class PeerSumDataset(Dataset):
     """
     Dataset for PeerSum from Hugging Face: oaimli/PeerSum.
-    Uses `review_contents` as the instruction and `meta_review` as the label.
+    Uses `paper_abstract` and `review_contents` to form the prompt,
+    and `meta_review` as the label.
+    Only samples where dataset attribute 'label' == 'train' will be used.
     """
+
     def __init__(self, tokenizer: PreTrainedTokenizer, split: str = "train", max_samples: Optional[int] = None):
         super().__init__()
-        logging.warning("Loading PeerSum dataset from Hugging Face...")
-        
+        logging.warning("Loading PeerSum dataset...")
+
+        # Load the full dataset for the specified split
         dataset = load_dataset("oaimli/PeerSum", split=split)
-        
+
+        # Filter the dataset to only include samples where label == "train"
+        dataset = dataset.filter(lambda x: x.get('label', '') == 'train')
+
         if max_samples is not None:
             dataset = dataset.select(range(max_samples))
-        
-        prompt_no_input = PROMPT_DICT["prompt_no_input_llama2"]
-        
-        sources = [
-            prompt_no_input.format_map({"instruction": example["review_contents"]})
-            for example in dataset
-        ]
-        targets = [f"{example['meta_review']}{tokenizer.eos_token}" for example in dataset]
+
+        sources = []
+        targets = []
+
+        for example in dataset:
+            paper_abstract = example.get("paper_abstract", "")
+            review_contents = example.get("review_contents", [])
+
+            # Clean up reviews
+            reviews = [r.strip() for r in review_contents if r.strip()]
+
+            if reviews:
+                numbered_reviews = [f"Review {i+1}:\n{rev}" for i, rev in enumerate(reviews)]
+                joined_reviews = "\n\n".join(numbered_reviews)
+            else:
+                joined_reviews = "No reviews available."
+
+            prompt = PROMPT_DICT["peersum_prompt"].format(
+                paper_abstract=paper_abstract,
+                review_contents=joined_reviews
+            )
+
+            meta_review = example.get("meta_review", "")
+            target_text = f"{meta_review}{tokenizer.eos_token}"
+
+            sources.append(prompt)
+            targets.append(target_text)
+
+        # Debug: print a few samples
+        # for i in range(min(3, len(sources))):
+        #     logging.info(f"Example {i}:")
+        #     logging.info(f"Prompt (Instruction): {sources[i]}")
+        #     logging.info(f"Label (Meta Review): {targets[i]}")
 
         logging.warning("Tokenizing PeerSum dataset inputs... This may take some time...")
-        
-        logging.warning(f"First {min(3, len(sources))} examples:")
-        for i in range(min(3, len(sources))):
-            logging.warning(f"Example {i}:")
-            logging.warning(f"Prompt: {sources[i]}")
-            logging.warning(f"Label: {targets[i]}")
-        
         data_dict = preprocess(sources, targets, tokenizer)
 
         self.input_ids = data_dict["input_ids"]

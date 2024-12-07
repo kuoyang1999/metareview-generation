@@ -21,7 +21,8 @@ class ModelArguments:
 
 @dataclass
 class DataArguments:
-    data_path: str = field(default=None, metadata={"help": "Path to the training data."})
+    data_name_or_path: str = field(default="oaimli/PeerSum", metadata={"help": "Hugging Face name or local path to the training data."})
+    max_samples: Optional[int] = field(default=None, metadata={"help": "Maximum number of samples to use."})
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
