@@ -1,0 +1,5 @@
+export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
+
+python scripts/evaluate.py \
+    --base_model "./checkpoints/20241207_125507/checkpoint-19000_merged" \
+    # --max_samples 4

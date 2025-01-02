@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
- 
+
+export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
+
 torchrun --nproc_per_node=4 \
-    scripts/train.py \
+    sft.py \
     --bf16 True \
-    --model_name_or_path "meta-llama/Llama-2-7b-hf" \
-    --output_dir "" \
-    --use_flash_attn True \
+    --output_dir "./checkpoints/sft_final" \
+    --use_flash_attn False \
     --low_rank_training True \
     --gradient_accumulation_steps 1 \
-    --num_train_epochs 20 \
-    --per_device_train_batch_size 1 \
-    --per_device_eval_batch_size 1 \
+    --num_train_epochs 1 \
+    --model_max_length 16384 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
     --eval_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 1000 \
+    --save_steps 500 \
     --save_total_limit 10 \
     --learning_rate 2e-5 \
     --weight_decay 0.0 \

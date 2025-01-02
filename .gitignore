@@ -18,6 +18,9 @@ checkpoints/
 logs/
 *.log
 wandb/
+.cache/
+cache/
+results/
 
 # Generated files
 *.pkl

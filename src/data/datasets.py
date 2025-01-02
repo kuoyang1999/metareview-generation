@@ -62,10 +62,10 @@ class PeerSumDataset(Dataset):
         logging.warning("Loading PeerSum dataset...")
 
         # Load the full dataset for the specified split
-        dataset = load_dataset("oaimli/PeerSum", split=split)
+        dataset = load_dataset("oaimli/PeerSum", split="all")
 
-        # Filter the dataset to only include samples where label == "train"
-        dataset = dataset.filter(lambda x: x.get('label', '') == 'train')
+        # Filter the dataset to only include samples where label == split
+        dataset = dataset.filter(lambda x: x.get('label', '') == split)
 
         if max_samples is not None:
             dataset = dataset.select(range(max_samples))
