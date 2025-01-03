@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
- 
-torchrun --nproc_per_node=4 \
+export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
+
+torchrun --nproc_per_node=3 \
     scripts/train.py \
+    --max_samples 1\
     --bf16 True \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
     --output_dir "" \
     --use_flash_attn True \
     --low_rank_training True \
     --gradient_accumulation_steps 1 \
-    --num_train_epochs 20 \
+    --num_train_epochs 500 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
     --eval_strategy "no" \

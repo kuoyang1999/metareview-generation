@@ -13,7 +13,6 @@ from src.data.data_module import make_supervised_data_module
 from .model import load_model_and_tokenizer, apply_lora_if_needed
 from .utils import IGNORE_INDEX
 from .attn.llama_attn_replace_sft import replace_llama_attn
-# from gptneox_attn_replace import replace_gpt_neox_attn # TODO: add this back when we have a model that uses it
 
 @dataclass
 class ModelArguments:
