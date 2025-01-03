@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 
-torchrun --nproc_per_node=3 \
-    scripts/train.py \
+torchrun --nproc_per_node=1 \
+    scripts/python/train.py \
     --max_samples 1\
     --bf16 True \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
@@ -10,7 +10,7 @@ torchrun --nproc_per_node=3 \
     --use_flash_attn True \
     --low_rank_training True \
     --gradient_accumulation_steps 1 \
-    --num_train_epochs 500 \
+    --num_train_epochs 20 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
     --eval_strategy "no" \

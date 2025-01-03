@@ -1,4 +1,4 @@
-from src.training import train
+from src.training.trainer import train
 
 if __name__ == "__main__":
     train()

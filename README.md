@@ -14,36 +14,74 @@
 ## Code Structure
 
 ```plaintext
-Meta-Review/
+LLMProject/
 ├─ src/
-│  ├─ __init__.py
-│  ├─ utils.py                   # Utilities, constants, prompt dict
-│  ├─ model.py                   # Model loading & LoRA configuration
-│  ├─ training.py                # Main training logic using HF Trainer
 │  ├─ data/
 │  │  ├─ __init__.py
-│  │  ├─ datasets.py             # Dataset classes (SupervisedDataset, PeerSumDataset)
-│  │  ├─ collators.py            # Data collators for supervised fine-tuning
-│  │  ├─ preprocessing.py        # Preprocessing/tokenization routines
-│  │  └─ data_module.py          # make_supervised_data_module function
-│  └─ attn/
-│     ├─ __init__.py
-│     └─ llama_attn_replace_sft.py # Patches LLaMA attention for flash attn
+│  │  ├─ datasets.py          # e.g. SupervisedDataset, PeerSumDataset
+│  │  ├─ collators.py         # DataCollator classes, etc.
+│  │  └─ data_module.py       # make_supervised_data_module, etc.
+│  │
+│  ├─ model/
+│  │  ├─ __init__.py
+│  │  ├─ base.py              # load_model_and_tokenizer
+│  │  ├─ lora.py              # apply_lora_if_needed
+│  │  └─ attn/
+│  │     ├─ __init__.py
+│  │     └─ llama_attn_replace_sft.py # Attention patching or FlashAttention-related code
+│  │
+│  ├─ training/
+│  │  ├─ __init__.py
+│  │  └─ trainer.py           # main training logic (HF Trainer or custom loops)
+│  │
+│  ├─ evaluation/
+│  │  ├─ __init__.py
+│  │  └─ eval_logic.py        # evaluation metrics, loops (perplexity, BLEU, ROUGE, etc.)
+│  │
+│  ├─ inference/
+│  │  ├─ __init__.py
+│  │  └─ infer.py             # inference or generation code
+│  │
+│  ├─ utils/
+│  │  ├─ __init__.py
+│  │  ├─ constants.py         # IGNORE_INDEX, special tokens, PROMPT_DICT, etc.
+│  │  ├─ io_utils.py          # jload(), file I/O functions
+│  │  └─ token_ops.py         # smart_tokenizer_and_embedding_resize, preprocess, etc.
+│  │
+│  └─ __init__.py             # optional top-level re-exports
 │
 ├─ scripts/
-│  └─ train.py                   # Entry point for training (calls `train()` from training.py)
+│  ├─ python/
+│  │  ├─ train.py             # main entry point for training (calls src/training/trainer)
+│  │  ├─ eval.py              # main entry for evaluation (calls src/evaluation/eval_logic)
+│  │  ├─ inference.py         # main entry for inference (uses src/inference/infer)
+│  │  └─ merge_weight.py      # merges model weights or LoRA adaptors
+│  └─ shell/
+│     ├─ train.sh             # quick reference shell script to run train.py
+│     ├─ eval.sh              # quick reference shell script to run eval.py
+│     ├─ inference.sh         # quick reference shell script to run inference.py
+│     └─ merge_weight.sh      # shell script for merging
 │
 ├─ configs/
-│  └─ deepspeed_config.json      # Example DeepSpeed config
+│  ├─ ds_configs/             # DeepSpeed config for 3 stages
+│  └─ hyperparams.yaml        # example hyperparam config
 │
-├─ checkpoints/                  # Checkpoints saved here
+├─ checkpoints/               # directory for saving model checkpoints
 │
 ├─ logs/
-│  └─ wandb/                     # Wandb logs
+│  ├─ wandb/                  # wandb logs (if used)
+│  └─ other_logs/             # custom logs, TB logs, etc.
 │
-├─ environment.yml               # Conda environment file (alternative install)
-├─ requirements.txt              # Pip requirements file (alternative install)
-└─ README.md                     # This documentation
+├─ tests/
+│  ├─ __init__.py
+│  ├─ test_data.py            # unit tests for data pipelines
+│  ├─ test_model.py           # unit tests for model loading, forward pass, etc.
+│  └─ test_utils.py           # unit tests for utility functions
+│
+├─ environment.yml            # conda environment file
+├─ requirements.txt           # pip requirements file
+├─ README.md                  # project overview & instructions
+└─ LICENSE                    # license (e.g., MIT, Apache-2.0)
 ```
 
 ## Installation
