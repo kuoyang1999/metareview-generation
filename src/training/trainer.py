@@ -92,6 +92,9 @@ def train():
     if not os.path.exists("logs"):
         os.makedirs("logs")
     if training_args.use_wandb and training_args.local_rank == 0:
+        
+        wandb.login(key=os.getenv("fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"), relogin=True)
+
         wandb.init(
             project="meta-review",
             config=config,
