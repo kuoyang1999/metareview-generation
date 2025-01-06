@@ -14,7 +14,7 @@
 ## Code Structure
 
 ```plaintext
-LLMProject/
+Meta-Review/
 ├─ src/
 │  ├─ data/
 │  │  ├─ __init__.py
