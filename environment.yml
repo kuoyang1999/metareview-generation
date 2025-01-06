@@ -1,4 +1,4 @@
-name: longLoRA
+name: meta-review
 channels:
   - conda-forge
   - defaults
