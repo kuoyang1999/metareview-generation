@@ -69,7 +69,7 @@ def preprocess(
     
     # Calculate max available length for sources
     max_source_lengths = [
-        tokenizer.model_max_length - target_len - 1  # -1 for safety
+        tokenizer.model_max_length - target_len
         for target_len in targets_lens
     ]
     
