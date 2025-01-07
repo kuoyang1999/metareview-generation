@@ -60,10 +60,10 @@ class PeerSumLongTest(Dataset):
             targets.append(target_text)
 
         # Debug: print a few samples
-        for i in range(min(3, len(sources))):
-            logging.debug(f"Example {i}:")
-            logging.debug(f"Prompt (Instruction): {sources[i]}")
-            logging.debug(f"Label (Meta Review): {targets[i]}")
+        # for i in range(min(3, len(sources))):
+        #     logging.debug(f"Example {i}:")
+        #     logging.debug(f"Prompt (Instruction): {sources[i]}")
+        #     logging.debug(f"Label (Meta Review): {targets[i]}")
 
         logging.warning("Tokenizing PeerSum dataset inputs... This may take some time...")
         data_dict = preprocess(sources, targets, tokenizer)

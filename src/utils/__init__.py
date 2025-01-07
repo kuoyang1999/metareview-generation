@@ -11,6 +11,7 @@ from .token_ops import (
     smart_tokenizer_and_embedding_resize,
     preprocess,
 )
+from .logging import init_wandb
 
 __all__ = [
     "IGNORE_INDEX",
@@ -22,4 +23,5 @@ __all__ = [
     "jload",
     "smart_tokenizer_and_embedding_resize",
     "preprocess",
+    "init_wandb",
 ]

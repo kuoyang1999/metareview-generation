@@ -7,14 +7,14 @@ import transformers
 import wandb
 
 from dataclasses import dataclass, field
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 from torch import nn
 from transformers import Trainer, HfArgumentParser
 
 # Local imports from your project
 from src.data import make_supervised_data_module
 from src.model import load_model_and_tokenizer, apply_lora_if_needed, replace_llama_attn
-from src.utils import jload, IGNORE_INDEX
+from src.utils import jload, IGNORE_INDEX, init_wandb
 
 # Set tokenizer parallelism environment variable
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -87,7 +87,12 @@ class TrainingArguments(transformers.TrainingArguments):
     )
     use_wandb: bool = field(
         default=True,
-        metadata={"help": "Enable Wandb logging (default: True)."},
+        metadata={"help": "Enable or disable Wandb logging."},
+    )
+    # Add 'report_to' to ensure we can override the default
+    report_to: Optional[List[str]] = field(
+        default_factory=lambda: ["none"],  # or [] if no reporting by default
+        metadata={"help": "Which integrations to report to. e.g. ['wandb', 'tensorboard']"}
     )
 
 def train():
@@ -110,7 +115,7 @@ def train():
 
     model, tokenizer = load_model_and_tokenizer(model_args, training_args)
     
-    logging.warning(f"Self-attn class in layer[0]: {model.model.layers[0].self_attn.__class__}")
+    logging.debug(f"Self-attn class in layer[0]: {model.model.layers[0].self_attn.__class__}")
 
     # Build data module
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
@@ -139,18 +144,7 @@ def train():
     }
 
     # Initialize Wandb if enabled
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
-    if training_args.use_wandb and training_args.local_rank == 0:
-        
-        wandb.login(key=os.getenv("fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"), relogin=True)
-
-        wandb.init(
-            project="meta-review",
-            config=config,
-            name=f"{timestamp}",
-            dir="logs",
-        )
+    wandb_enabled = init_wandb(training_args, config)
 
     # Apply LoRA if needed
     model = apply_lora_if_needed(model, model_args, training_args)
@@ -182,5 +176,5 @@ def train():
         json.dump(config, f, indent=4)
 
     # End Wandb session
-    if training_args.use_wandb:
+    if wandb_enabled:
         wandb.finish()

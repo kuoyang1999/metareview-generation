@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
+export WANDB_API_KEY="fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"
 
 torchrun --nproc_per_node=1 \
     scripts/python/train.py \
