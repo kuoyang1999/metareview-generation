@@ -22,7 +22,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # Configure logging
 timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
 os.makedirs("logs/logging", exist_ok=True)
-log_file = f"logs/training_{timestamp}.log"
+log_file = f"logs/logging/training_{timestamp}.log"
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',

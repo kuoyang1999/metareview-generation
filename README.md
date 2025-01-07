@@ -49,6 +49,10 @@ Meta-Review/
 │  │  ├─ io_utils.py          # jload(), file I/O functions
 │  │  └─ token_ops.py         # smart_tokenizer_and_embedding_resize, preprocess, etc.
 │  │
+│  ├─ tests/                  # unit tests
+│  │  ├─ __init__.py
+│  │  └─ test_data.py         # unit tests for data pipelines
+│  │
 │  └─ __init__.py             # optional top-level re-exports
 │
 ├─ scripts/
@@ -73,12 +77,6 @@ Meta-Review/
 ├─ logs/
 │  ├─ wandb/                  # wandb logs (if used)
 │  └─ other_logs/             # custom logs, TB logs, etc.
-│
-├─ tests/
-│  ├─ __init__.py
-│  ├─ test_data.py            # unit tests for data pipelines
-│  ├─ test_model.py           # unit tests for model loading, forward pass, etc.
-│  └─ test_utils.py           # unit tests for utility functions
 │
 ├─ environment.yml            # conda environment file
 ├─ requirements.txt           # pip requirements file

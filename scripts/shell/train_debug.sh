@@ -5,6 +5,7 @@ torchrun --nproc_per_node=1 \
     scripts/python/train.py \
     --max_samples 1 \
     --bf16 True \
+    --data_name_or_path "test" \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
     --output_dir "" \
     --use_flash_attn True \
@@ -25,6 +26,7 @@ torchrun --nproc_per_node=1 \
     --tf32 True \
     --deepspeed configs/ds_configs/stage3.json \
     --logging_level "debug" \
+    --use_wandb False
 
     # --max_samples 8
     #     --data_name_or_path /mnt/nvme1/datasets/LongAlpaca-16k-length/LongAlpaca-16k-length.json \
