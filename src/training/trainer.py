@@ -7,7 +7,7 @@ import transformers
 import wandb
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Literal
 from torch import nn
 from transformers import Trainer, HfArgumentParser
 
@@ -18,6 +18,12 @@ from src.utils import jload, IGNORE_INDEX
 
 # Set tokenizer parallelism environment variable
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+# Configure logging
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 @dataclass
 class ModelArguments:
@@ -42,6 +48,13 @@ class TrainingArguments(transformers.TrainingArguments):
     warmup_steps: int = field(
         default=0,
         metadata={"help": "Number of steps for the warmup phase."},
+    )
+    logging_level: str = field(
+        default="info",
+        metadata={
+            "help": "Logging level (debug, info, warning, error, critical)",
+            "choices": ["debug", "info", "warning", "error", "critical"]
+        }
     )
 
     model_max_length: int = field(
@@ -73,6 +86,9 @@ def train():
     parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
+    # Set logging level
+    logging.getLogger().setLevel(training_args.logging_level.upper())
+    
     # Setup default output directory
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     if not training_args.output_dir:
@@ -82,9 +98,11 @@ def train():
     if model_args.model_type == "gpt-neox":
         raise NotImplementedError("GPT-NeoX models are not currently supported.")
     else:
-        replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)
+        replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)    
 
     model, tokenizer = load_model_and_tokenizer(model_args, training_args)
+    
+    logging.warning("Self-attn class in layer[0]:", model.model.layers[0].self_attn.__class__)
 
     # Build data module
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
