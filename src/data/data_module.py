@@ -16,7 +16,7 @@ def make_supervised_data_module(tokenizer: PreTrainedTokenizer, data_args) -> Di
     
     if data_args.data_name_or_path == "oaimli/PeerSum":
         train_dataset = PeerSumDataset(tokenizer=tokenizer, split="train", max_samples=data_args.max_samples)
-        eval_dataset = None  # Modify if PeerSum has validation/test splits
+        eval_dataset = PeerSumDataset(tokenizer=tokenizer, split="val", max_samples=data_args.max_samples)  # Modify if PeerSum has validation/test splits
     elif data_args.data_name_or_path == "test":
         train_dataset = PeerSumLongTest(tokenizer=tokenizer, split="train", max_samples=data_args.max_samples)
         eval_dataset = None  # Modify if PeerSum has validation/test splits

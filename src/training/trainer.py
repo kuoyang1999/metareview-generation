@@ -16,6 +16,9 @@ from src.data import make_supervised_data_module
 from src.model import load_model_and_tokenizer, apply_lora_if_needed, replace_llama_attn
 from src.utils import jload, IGNORE_INDEX, init_wandb
 
+# Set random seed for reproducibility
+transformers.set_seed(42)
+
 # Set tokenizer parallelism environment variable
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -94,11 +97,15 @@ class TrainingArguments(transformers.TrainingArguments):
         default_factory=lambda: ["none"],  # or [] if no reporting by default
         metadata={"help": "Which integrations to report to. e.g. ['wandb', 'tensorboard']"}
     )
+    lora_r: int = field(
+        default=8,
+        metadata={"help": "Rank of LoRA matrices."},
+    )
 
 def train():
     parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-
+    
     # Set logging level
     logging.getLogger().setLevel(training_args.logging_level.upper())
     
@@ -140,6 +147,7 @@ def train():
         "low_rank_training": training_args.low_rank_training,
         "save_steps": training_args.save_steps,
         "output_dir": training_args.output_dir,
+        "lora_r": training_args.lora_r,
         # ... add more as needed
     }
 

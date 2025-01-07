@@ -14,7 +14,7 @@ def apply_lora_if_needed(model, model_args, training_args):
             targets = ["q_proj", "k_proj", "v_proj", "o_proj"]
 
         lora_config = LoraConfig(
-            r=8,
+            r=training_args.lora_r,
             lora_alpha=16,
             target_modules=targets,
             lora_dropout=0,
