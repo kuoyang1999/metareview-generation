@@ -18,9 +18,10 @@ def init_wandb(training_args, config, timestamp):
 
     try:
         # Login with the stored API key from the environment
-        wandb.login(key=os.getenv("WANDB_API_KEY"), relogin=True)
-        wandb.init(project="meta-review", config=config, name=f"{timestamp}", dir="/logs")
-        logging.info("W&B initialized successfully.")
+        if training_args.local_rank == 0:
+            wandb.login(key=os.getenv("WANDB_API_KEY"), relogin=True)
+            wandb.init(project="meta-review", config=config, name=f"{timestamp}", dir="logs")
+            logging.info("W&B initialized successfully.")
         return True
     except Exception as e:
         logging.error(f"Failed to initialize W&B: {e}")

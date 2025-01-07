@@ -92,11 +92,6 @@ class TrainingArguments(transformers.TrainingArguments):
         default=True,
         metadata={"help": "Enable or disable Wandb logging."},
     )
-    # Add 'report_to' to ensure we can override the default
-    report_to: Optional[List[str]] = field(
-        default_factory=lambda: ["none"],  # or [] if no reporting by default
-        metadata={"help": "Which integrations to report to. e.g. ['wandb', 'tensorboard']"}
-    )
     lora_r: int = field(
         default=8,
         metadata={"help": "Rank of LoRA matrices."},
@@ -152,6 +147,7 @@ def train():
     }
 
     # Initialize Wandb if enabled
+
     wandb_enabled = init_wandb(training_args, config, timestamp)
 
     # Apply LoRA if needed
