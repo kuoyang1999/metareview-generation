@@ -102,7 +102,7 @@ def train():
 
     model, tokenizer = load_model_and_tokenizer(model_args, training_args)
     
-    logging.warning("Self-attn class in layer[0]:", model.model.layers[0].self_attn.__class__)
+    logging.warning(f"Self-attn class in layer[0]: {model.model.layers[0].self_attn.__class__}")
 
     # Build data module
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
