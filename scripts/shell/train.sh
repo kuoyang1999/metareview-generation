@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 
-torchrun --nproc_per_node=1 \
+torchrun --nproc_per_node=3 \
     scripts/python/train.py \
     --max_samples 1\
     --bf16 True \
@@ -28,5 +28,4 @@ torchrun --nproc_per_node=1 \
     # --max_samples 8
     #     --data_name_or_path /mnt/nvme1/datasets/LongAlpaca-16k-length/LongAlpaca-16k-length.json \
     #    --model_max_length 16384 \
-    #    --model_name_or_path /mnt/nvme1/models/Llama-2-7b-hf \
     #    --data_name_or_path "oaimli/PeerSum" \
