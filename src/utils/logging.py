@@ -1,8 +1,9 @@
 import logging
 import os
 import wandb
+from datetime import datetime
 
-def init_wandb(training_args, config):
+def init_wandb(training_args, config, timestamp):
     """
     Attempt to login and initialize W&B if WANDB_API_KEY is present
     and if training_args.use_wandb is True.
@@ -18,7 +19,7 @@ def init_wandb(training_args, config):
     try:
         # Login with the stored API key from the environment
         wandb.login(key=os.getenv("WANDB_API_KEY"), relogin=True)
-        wandb.init(project="meta-review", config=config, name=f"{timestamp}", dir="/logs", report_to=["wandb"])
+        wandb.init(project="meta-review", config=config, name=f"{timestamp}", dir="/logs")
         logging.info("W&B initialized successfully.")
         return True
     except Exception as e:

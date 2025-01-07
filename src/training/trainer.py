@@ -152,7 +152,7 @@ def train():
     }
 
     # Initialize Wandb if enabled
-    wandb_enabled = init_wandb(training_args, config)
+    wandb_enabled = init_wandb(training_args, config, timestamp)
 
     # Apply LoRA if needed
     model = apply_lora_if_needed(model, model_args, training_args)

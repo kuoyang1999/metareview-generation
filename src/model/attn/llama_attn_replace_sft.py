@@ -311,6 +311,9 @@ def forward_flashattn_inference(
     use_cache: bool = False,
     padding_mask: Optional[torch.Tensor] = None,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    
+    logging.debug(f"Processing sequence in inference with batch_size={bsz}, sequence_length={q_len}")
+    
     if output_attentions:
         warnings.warn("Output attentions not supported in inference mode.")
 
@@ -360,6 +363,9 @@ def forward_flashattn_inference(
 def _prepare_decoder_attention_mask_inference(
     self, attention_mask, input_shape, inputs_embeds, past_key_values_length
 ):    
+    
+    logging.debug(f"Preparing decoder attention mask with shape {attention_mask.shape}")
+    
     if past_key_values_length > 0 and attention_mask is not None:
         attention_mask = torch.cat(
             (
@@ -387,11 +393,14 @@ def replace_llama_attn(use_flash_attn=True, use_full=False, inference=False):
         if inference:
             transformers.models.llama.modeling_llama.LlamaModel._prepare_decoder_attention_mask = _prepare_decoder_attention_mask_inference
             transformers.models.llama.modeling_llama.LlamaAttention.forward = forward_flashattn_inference
+            logging.debug("Replaced with flash attention for inference.")
         else:
             transformers.models.llama.modeling_llama.LlamaModel._prepare_decoder_attention_mask = (
                 _prepare_decoder_attention_mask
             )
             # TODO: Modify to SdpaAttention
             transformers.models.llama.modeling_llama.LlamaAttention.forward = forward_flashattn_full if use_full else forward_flashattn
+            logging.debug("Replaced with flash attention for training.")
     else:
         transformers.models.llama.modeling_llama.LlamaAttention.forward = forward_noflashattn
+        logging.debug("Using standard attention.")
