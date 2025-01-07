@@ -20,9 +20,17 @@ from src.utils import jload, IGNORE_INDEX
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Configure logging
+timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+os.makedirs("logs/logging", exist_ok=True)
+log_file = f"logs/training_{timestamp}.log"
+
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler(log_file),
+        logging.StreamHandler()  # This will still print to console
+    ]
 )
 
 @dataclass

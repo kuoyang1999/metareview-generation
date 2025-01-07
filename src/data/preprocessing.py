@@ -2,6 +2,7 @@ from typing import Dict, Sequence
 import copy
 import transformers
 import torch
+import logging
 
 from ..utils import IGNORE_INDEX
 
@@ -45,6 +46,13 @@ def preprocess(
     ]
     input_ids = examples_tokenized["input_ids"]
     labels = copy.deepcopy(input_ids)
+
+    # Log token lengths if debug logging is enabled
+    if logging.getLogger().isEnabledFor(logging.DEBUG):
+        for i, (input_id, source_len) in enumerate(zip(input_ids, sources_tokenized["input_ids_lens"])):
+            total_len = len(input_id)
+            target_len = total_len - source_len
+            logging.debug(f"Example {i}: Total tokens = {total_len}, Source tokens = {source_len}, Target tokens = {target_len}")
 
     # Mask out the input portion by setting them to IGNORE_INDEX
     for label, source_len in zip(labels, sources_tokenized["input_ids_lens"]):
