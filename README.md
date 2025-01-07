@@ -20,7 +20,8 @@ Meta-Review/
 │  │  ├─ __init__.py
 │  │  ├─ datasets.py          # e.g. SupervisedDataset, PeerSumDataset
 │  │  ├─ collators.py         # DataCollator classes, etc.
-│  │  └─ data_module.py       # make_supervised_data_module, etc.
+│  │  ├─ data_module.py       # make_supervised_data_module, etc.
+│  │  └─ preprocessing.py     # preprocess function for tokenization
 │  │
 │  ├─ model/
 │  │  ├─ __init__.py
@@ -60,7 +61,8 @@ Meta-Review/
 │     ├─ train.sh             # quick reference shell script to run train.py
 │     ├─ eval.sh              # quick reference shell script to run eval.py
 │     ├─ inference.sh         # quick reference shell script to run inference.py
-│     └─ merge_weight.sh      # shell script for merging
+│     ├─ merge_weight.sh      # shell script for merging
+│     └─ run_docker.sh        # script to run Docker container with GPU support
 │
 ├─ configs/
 │  ├─ ds_configs/             # DeepSpeed config for 3 stages
@@ -80,8 +82,10 @@ Meta-Review/
 │
 ├─ environment.yml            # conda environment file
 ├─ requirements.txt           # pip requirements file
-├─ README.md                  # project overview & instructions
-└─ LICENSE                    # license (e.g., MIT, Apache-2.0)
+├─ Dockerfile                # CUDA-enabled container definition
+├─ .dockerignore             # files to exclude from Docker context
+├─ README.md                 # project overview & instructions
+└─ LICENSE                   # license (e.g., MIT, Apache-2.0)
 ```
 
 ## Installation
