@@ -107,21 +107,21 @@ def preprocess(
         labels.append(combined_labels)
 
     # Log token lengths if debug logging is enabled for the first 3 or less examples
-    if logging.getLogger().isEnabledFor(logging.DEBUG):
-        for i, (input_id, source_len, target_len) in enumerate(zip(input_ids, 
-            [s.input_ids.ne(tokenizer.pad_token_id).sum().item() for s in sources_tokenized_list],
-            targets_lens)):
-            if i >= 3:
-                break
-            total_len = len(input_id)
-            # Decode the tokens back to strings for debugging
-            source_text = tokenizer.decode(input_id[:source_len])
-            target_text = tokenizer.decode(input_id[source_len:source_len + target_len])
-            logging.debug("-" * 80)
-            logging.debug(f"Decoded example {i}:")
-            logging.debug(f"  Total tokens = {total_len}, Source tokens = {source_len}, Target tokens = {target_len}")
-            logging.debug(f"  Source text: {source_text}")
-            logging.debug(f"  Target text: {target_text}")
-            logging.debug("-" * 80)
+    # if logging.getLogger().isEnabledFor(logging.DEBUG):
+    #     for i, (input_id, source_len, target_len) in enumerate(zip(input_ids, 
+    #         [s.input_ids.ne(tokenizer.pad_token_id).sum().item() for s in sources_tokenized_list],
+    #         targets_lens)):
+    #         if i >= 3:
+    #             break
+    #         total_len = len(input_id)
+    #         # Decode the tokens back to strings for debugging
+    #         source_text = tokenizer.decode(input_id[:source_len])
+    #         target_text = tokenizer.decode(input_id[source_len:source_len + target_len])
+    #         logging.debug("-" * 80)
+    #         logging.debug(f"Decoded example {i}:")
+    #         logging.debug(f"  Total tokens = {total_len}, Source tokens = {source_len}, Target tokens = {target_len}")
+    #         logging.debug(f"  Source text: {source_text}")
+    #         logging.debug(f"  Target text: {target_text}")
+    #         logging.debug("-" * 80)
 
     return dict(input_ids=input_ids, labels=labels)
