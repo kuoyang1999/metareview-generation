@@ -30,10 +30,7 @@ def forward_flashattn(
     output_attentions: bool = False,
     use_cache: bool = False,
     padding_mask: Optional[torch.LongTensor] = None,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
-    
-    logging.warning(f"[DEBUG] Inside forward_flashattn()")
-        
+) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:        
     """Input shape: Batch x Time x Channel"""
     if not self.training:
         warnings.warn("This function should be used just for training as it may exhibit reduced inference performance. For inference, please use forward_flashattn_inference.")
@@ -131,10 +128,7 @@ def forward_flashattn_full(
     output_attentions: bool = False,
     use_cache: bool = False,
     padding_mask: Optional[torch.LongTensor] = None,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
-    
-    logging.warning(f"[DEBUG] Inside forward_flashattn_full()")
-    
+) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:    
     if output_attentions:
         warnings.warn("Output attentions not supported with this patched function.")
 
@@ -205,10 +199,7 @@ def forward_noflashattn(
     output_attentions: bool = False,
     use_cache: bool = False,
     padding_mask: Optional[torch.LongTensor] = None,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
-    
-    logging.warning(f"[DEBUG] Inside forward_noflashattn()")
-    
+) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:    
     # This is a fallback method with no flash attention optimization.
     # Due to length, omitting detailed comments. This matches the original code provided.
     bsz, q_len, _ = hidden_states.size()
@@ -297,7 +288,6 @@ def forward_noflashattn(
 def _prepare_decoder_attention_mask(
     self, attention_mask, input_shape, inputs_embeds, past_key_values_length
 ):
-    logging.warning(f"[DEBUG] Inside _prepare_decoder_attention_mask()")
     return attention_mask
 
 def apply_rotary_pos_emb_inference(q, k, cos_sin, position_ids):
@@ -369,9 +359,7 @@ def forward_flashattn_inference(
 
 def _prepare_decoder_attention_mask_inference(
     self, attention_mask, input_shape, inputs_embeds, past_key_values_length
-):
-    logging.warning(f"[DEBUG] Inside _prepare_decoder_attention_mask_inference()")
-    
+):    
     if past_key_values_length > 0 and attention_mask is not None:
         attention_mask = torch.cat(
             (
