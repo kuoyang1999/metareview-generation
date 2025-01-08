@@ -2,10 +2,9 @@
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 export WANDB_API_KEY="fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"
 
-torchrun --nproc_per_node=3 \
+torchrun --nproc_per_node=8 \
     scripts/python/train.py \
     --bf16 True \
-    --max_samples 1 \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
     --output_dir "" \
     --use_flash_attn True \
@@ -13,9 +12,7 @@ torchrun --nproc_per_node=3 \
     --gradient_accumulation_steps 4 \
     --num_train_epochs 10 \
     --per_device_train_batch_size 1 \
-    --per_device_eval_batch_size 2 \
-    --evaluation_strategy "steps" \
-    --eval_steps 1 \
+    --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 200 \
     --save_total_limit 10 \
