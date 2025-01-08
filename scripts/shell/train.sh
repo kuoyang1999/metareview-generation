@@ -15,7 +15,7 @@ torchrun --nproc_per_node=8 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 200 \
-    --save_total_limit 10 \
+    --save_total_limit 20 \
     --learning_rate 2e-5 \
     --weight_decay 0.0 \
     --warmup_steps 20 \
