@@ -2,6 +2,14 @@
 
 **LLM Meta Review** is a project aimed at extending the context length of LLaMA-based models and fine-tuning them using low-rank adaptation (LoRA) for meta review tasks. It includes support for flash attention, custom datasets, and integration with DeepSpeed for efficient large-model training.
 
+## Updates
+
+- 2025-01-07: 🔥 To God Hua: 
+  - conda activate meta-review
+  - pip install transformers==4.34.0
+  - pip install deepspeed==0.15.4
+  - sh scripts/shell/train.sh
+
 ## Features
 
 - **Extended Context Length:** Train language models with up to 32k or more tokens of context.
