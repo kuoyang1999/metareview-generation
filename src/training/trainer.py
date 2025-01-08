@@ -51,10 +51,6 @@ class DataArguments:
         default=None,
         metadata={"help": "Maximum number of samples to use for training."}
     )
-    max_eval_samples: Optional[int] = field(
-        default=None,
-        metadata={"help": "Maximum number of samples to use for evaluation. If None, use all available samples."}
-    )
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):

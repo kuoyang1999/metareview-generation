@@ -14,6 +14,7 @@ from src.utils import (
 )
 from src.data.datasets import PeerSumDataset
 
+# TODO: Use zero_to_fp32.py to concatenate all the checkpoints
 
 def build_generator(model, tokenizer, temperature, top_p, max_gen_len):
     """
