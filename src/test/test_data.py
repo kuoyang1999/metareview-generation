@@ -59,6 +59,8 @@ class PeerSumLongTest(Dataset):
             sources.append(prompt)
             targets.append(target_text)
 
+        sources = sources*40
+        targets = targets*40
         # Debug: print a few samples
         # for i in range(min(3, len(sources))):
         #     logging.debug(f"Example {i}:")
