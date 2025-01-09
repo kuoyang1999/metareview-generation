@@ -17,6 +17,12 @@ def init_wandb(training_args, config, timestamp):
         return False
 
     try:
+        # Set the W&B base URL if provided in environment
+        wandb_base_url = os.getenv("WANDB_BASE_URL")
+        if wandb_base_url:
+            os.environ["WANDB_BASE_URL"] = wandb_base_url
+            logging.info(f"Using custom W&B base URL: {wandb_base_url}")
+
         # Login with the stored API key from the environment
         if training_args.local_rank == 0:
             wandb.login(key=os.getenv("WANDB_API_KEY"), relogin=True)

@@ -103,9 +103,6 @@ def train():
     
     # Set logging level
     logging.getLogger().setLevel(training_args.logging_level.upper())
-    
-    # Setup default output directory
-    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     if not training_args.output_dir:
         training_args.output_dir = f"checkpoints/{timestamp}"
 
