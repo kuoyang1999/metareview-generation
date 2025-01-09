@@ -2,8 +2,9 @@
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 export WANDB_API_KEY="fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"
 export WANDB_BASE_URL="https://api.wandb.ai"
+wandb login fef0c9efbf5c8ed6f3fb3811b172280e040e1bba --relogin
 
-torchrun --nproc_per_node=3 \
+torchrun --nproc_per_node=8 \
     scripts/python/train.py \
     --bf16 True \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
