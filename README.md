@@ -82,16 +82,16 @@ Meta-Review/
 │
 ├─ checkpoints/               # directory for saving model checkpoints
 │
-├─ logs/
-│  ├─ wandb/                  # wandb logs (if used)
-│  └─ other_logs/             # custom logs, TB logs, etc.
+├─ logs/                      # local logs
+│
+├─ wandb/                     # wandb logs
 │
 ├─ environment.yml            # conda environment file
 ├─ requirements.txt           # pip requirements file
-├─ Dockerfile                # CUDA-enabled container definition
-├─ .dockerignore             # files to exclude from Docker context
-├─ README.md                 # project overview & instructions
-└─ LICENSE                   # license (e.g., MIT, Apache-2.0)
+├─ Dockerfile                 # CUDA-enabled container definition
+├─ .dockerignore              # files to exclude from Docker context
+├─ README.md                  # project overview & instructions
+└─ LICENSE                    # license (e.g., MIT, Apache-2.0)
 ```
 
 ## Installation

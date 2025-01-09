@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 
-torchrun --nproc_per_node=1 \
+torchrun --nproc_per_node=3 \
     scripts/python/train.py \
     --max_samples 1 \
     --bf16 True \
@@ -10,10 +10,9 @@ torchrun --nproc_per_node=1 \
     --output_dir "" \
     --use_flash_attn True \
     --low_rank_training True \
-    --gradient_accumulation_steps 2 \
+    --gradient_accumulation_steps 8 \
     --num_train_epochs 2 \
     --per_device_train_batch_size 1 \
-    --per_device_eval_batch_size 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 1000 \

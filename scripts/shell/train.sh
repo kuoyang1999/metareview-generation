@@ -2,7 +2,7 @@
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 export WANDB_API_KEY="fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"
 
-torchrun --nproc_per_node=8 \
+torchrun --nproc_per_node=3 \
     scripts/python/train.py \
     --bf16 True \
     --model_name_or_path "meta-llama/Llama-2-7b-hf" \
@@ -23,3 +23,4 @@ torchrun --nproc_per_node=8 \
     --logging_steps 1 \
     --tf32 True \
     --deepspeed configs/ds_configs/stage3.json
+    # --lora_r 16
