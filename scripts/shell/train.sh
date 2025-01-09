@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export PYTHONPATH=$PYTHONPATH:/mnt/nvme1/Kuo/Meta-Review
 export WANDB_API_KEY="fef0c9efbf5c8ed6f3fb3811b172280e040e1bba"
+export WANDB_BASE_URL="https://api.wandb.ai"
 
 torchrun --nproc_per_node=3 \
     scripts/python/train.py \
@@ -23,4 +24,5 @@ torchrun --nproc_per_node=3 \
     --logging_steps 1 \
     --tf32 True \
     --deepspeed configs/ds_configs/stage3.json
+    # --max_samples 1 \
     # --lora_r 16
