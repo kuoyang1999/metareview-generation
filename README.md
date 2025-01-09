@@ -4,7 +4,9 @@
 
 ## Updates
 
-- 2025-01-07: 🔥 To God Hua: 
+- 2025-01-07: 🔥 To God Hua:
+  - conda env create -f environment.yml
+  - pip install -r requirements.txt
   - conda activate meta-review
   - pip install transformers==4.34.0
   - pip install deepspeed==0.15.4
