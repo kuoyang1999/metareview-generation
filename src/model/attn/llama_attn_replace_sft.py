@@ -310,15 +310,14 @@ def forward_flashattn_inference(
     output_attentions: bool = False,
     use_cache: bool = False,
     padding_mask: Optional[torch.Tensor] = None,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
-    
-    logging.debug(f"Processing sequence in inference with batch_size={bsz}, sequence_length={q_len}")
-    
+) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:    
     if output_attentions:
         warnings.warn("Output attentions not supported in inference mode.")
 
     bsz, q_len, _ = hidden_states.size()
     kv_heads = getattr(self, "num_key_value_heads", self.num_heads)
+    
+    # logging.warning(f"Processing sequence in inference with batch_size={bsz}, sequence_length={q_len}")
 
     q, k, v = (
         op(hidden_states).view(bsz, q_len, nh, self.head_dim)
