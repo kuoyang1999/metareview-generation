@@ -15,10 +15,7 @@ from src.utils import init_wandb
 
 def train(model_args, data_args, training_args, timestamp):
     # Setup attention
-    if model_args.model_type == "gpt-neox":
-        raise NotImplementedError("GPT-NeoX models are not currently supported.")
-    else:
-        replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)    
+    replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)    
 
     model, tokenizer = load_model_and_tokenizer(model_args, training_args)
     
