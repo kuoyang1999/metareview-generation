@@ -1,6 +1,6 @@
-# LLM Meta Review
+# LLM Meta Review Generation
 
-**LLM Meta Review** is a project aimed at extending the context length of LLaMA-based models and fine-tuning them using low-rank adaptation (LoRA) for meta review tasks. It includes support for flash attention, custom datasets, and integration with DeepSpeed for efficient large-model training.
+**LLM Meta Review Generation** is a project aimed at extending the context length of LLaMA-based models and fine-tuning them using low-rank adaptation (LoRA) for meta review tasks.
 
 ## Features
 
