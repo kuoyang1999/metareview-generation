@@ -34,7 +34,7 @@ Thumbs.db
 
 # Ignore environment files
 .env
-.env.*
+# .env.*
 
 # Ignore large files or intermediate datasets if any
 data/raw/
