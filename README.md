@@ -9,7 +9,7 @@
 - **Flash Attention Support:** Leverage flash attention for faster training on compatible hardware (A100/H100).
 - **Hugging Face Datasets Integration:** Easily load and preprocess datasets from the Hugging Face Hub.
 - **DeepSpeed Integration:** Utilize ZeRO optimization and other features to handle large-scale training.
-- **Custom Prompts:** Adapt prompt templates for different datasets (e.g., PeerSum with multiple reviews).
+- **Custom Prompts:** Adapt prompt templates for different datasets (e.g., MetaSum with multiple reviews).
 
 ## Code Structure
 
@@ -18,7 +18,7 @@ Meta-Review/
 ├─ src/
 │  ├─ data/
 │  │  ├─ __init__.py
-│  │  ├─ datasets.py          # e.g. SupervisedDataset, PeerSumDataset
+│  │  ├─ datasets.py          # e.g. MetaSum
 │  │  ├─ collators.py         # DataCollator classes, etc.
 │  │  ├─ data_module.py       # make_supervised_data_module, etc.
 │  │  └─ preprocessing.py     # preprocess function for tokenization
@@ -191,7 +191,7 @@ torchrun --nproc_per_node=4 \
 ### Key Arguments:
 
 - `--model_name_or_path`: Local or Hub model path (e.g., `meta-llama/Llama-2-7b-hf`).
-- `--data_path`: Dataset name on HF Hub (e.g., `oaimli/PeerSum`) or local path.
+- `--data_path`: Dataset name on HF Hub (e.g., `kuoyang1999/MetaSum`) or local path.
 - `--use_flash_attn`: Enables flash attention (requires appropriate GPU).
 - `--low_rank_training`: Enables LoRA fine-tuning.
 - `--deepspeed`: Uses the provided DeepSpeed config for efficient training.
